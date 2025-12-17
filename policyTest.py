@@ -32,7 +32,7 @@ class PolicyTest:
                 break
         return obj
     
-    def createCertArgs(certIds:list, alias:str = TEST_ALIAS, id:str = None ):
+    def createCertArgs(certIds:list, alias:str = TEST_ALIAS):
         arg =  {
                 # 'CertPathValidationPolicyID' : id,
                 'Parameters' : {},
@@ -42,30 +42,27 @@ class PolicyTest:
             arg['TrustAnchor'] = []
         for i in certIds:
             arg['TrustAnchor'].append({'CertificateID' : i})
-
-        if(id):
-            arg['CertPathValidationPolicyID'] = id
         return arg
     
     def clean(self):
         self.keyLoader.clean()
         self.certLoader.clean()
         objs = self.keystore.GetAllCertPathValidationPolicies()
-        print(objs)
+        # print(objs)
         for obj in objs:
             id = obj['CertPathValidationPolicyID']
             self.keystore.DeleteCertPathValidationPolicy(id)
     
     def loadPolicy(self, certIds : list):
         args = PolicyTest.createCertArgs(certIds)
-        print(f'toLoad:{args}')
+        # print(f'toLoad:{args}')
         return self.keystore.CreateCertPathValidationPolicy(**args)
     
     def unpackTrustList(trustL):
         addedIds = []
         for id in trustL:
             addedIds.append(id['CertificateID'])
-        print(f'TrustL: {addedIds}')
+        # print(f'TrustL: {addedIds}')
         return addedIds
 
     def uploadTest(self):
@@ -75,7 +72,7 @@ class PolicyTest:
         objId = self.loadPolicy(certIds)
         objs = self.keystore.GetAllCertPathValidationPolicies()
         obj = PolicyTest.find(objId, objs)
-        print(f"{obj}")
+        # print(f"{obj}")
         if(not obj):
             raise ValueError("certPolicy doesn`t exist")
         if certIds != PolicyTest.unpackTrustList(obj['TrustAnchor']):
@@ -101,12 +98,26 @@ class PolicyTest:
         objId = self.loadPolicy(certIds)
         objs = self.keystore.GetAllCertPathValidationPolicies()
         obj = PolicyTest.find( objId, objs)
-        print(obj)
+        # print(obj)
         if(not obj):
             raise ValueError("certPolicy doesn`t exist")
         if certIds != PolicyTest.unpackTrustList(obj['TrustAnchor']):
             raise ValueError("invalid certIds")
-        self.clean()
+        # self.clean() #skip cleaning for next test
+        print('OK')
+        print('setting 2 certs: ', end='')
+        certIds = certIds[:1]
+        # args = {'CertPathValidationPolicyID'}
+        oldObj = self.keystore.GetCertPathValidationPolicy('default')        
+        args = {
+            'CertPathValidationPolicyID' : objId,
+            'CertPathValidationPolicy' : PolicyTest.createCertArgs(certIds)
+        }
+        args['CertPathValidationPolicy']['CertPathValidationPolicyID'] = objId # this no error - just stupid arg structure!
+        self.keystore.SetCertPathValidationPolicy(**args)
+        newObj = self.keystore.GetCertPathValidationPolicy('default')
+        if(newObj == oldObj):
+            raise ValueError('change policy failed')
         print('OK')
 
         # zeep dont allow empty list!
@@ -156,7 +167,6 @@ class PolicyTest:
         if len(objs):
             raise ValueError("Cant delete pathes`")
         self.uploadTest() 
-        # setTest
         self.limitTest()
         self.clean()
         print(f'PolicyTest passed!')

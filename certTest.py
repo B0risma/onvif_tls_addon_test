@@ -39,7 +39,7 @@ class CertTest:
     def uploadTest(self):
         print("loading Certificate: ", end = '')
         resp = self.uploadCert(VALID_CERT, Alias=self.TEST_ALIAS)
-        certId= resp['CertificateID']
+        certId = resp['CertificateID']
         if certId == INVALID_ID:
             raise ValueError("failed uploading Certificate")
         obj = self.keystore.GetCertificate(certId)
@@ -106,6 +106,12 @@ class CertTest:
         keyId = self.uploadCert(VALID_CERT)['KeyID']
         if not keyId or keyId == INVALID_ID:
             raise ValueError("invalid keyID")
+        
+        data = self.keystore.GetPrivateKeyStatus(keyId)
+        # print(data)
+        if(data == True):
+            raise ValueError('key from cert must be public')
+
         keys = self.keystore.GetAllKeys()
         key = None
         for k in keys:

@@ -54,6 +54,15 @@ class KeyTest:
         if(not obj['hasPrivateKey']):
             raise ValueError("cant resolve private keys")
         print("OK")
+
+        print('getting key status: ', end ='')
+        data = self.keystore.GetKeyStatus(id)
+        if(data != 'ok'): # from KeyStatus enum (wsdl)
+            raise ValueError('key not OK')
+        data = self.keystore.GetPrivateKeyStatus(id)
+        if(data != True): 
+            raise ValueError('key must be private')
+        print("OK")
         
         self.keystore.DeleteKey(id)
         id = None

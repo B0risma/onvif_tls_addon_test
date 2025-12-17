@@ -59,6 +59,15 @@ class PathTest:
         }}
         return self.keystore.CreateCertificationPath(**arg)
     
+    def setCertPathArgs(pathId:str, idList:list):
+        arg = {
+            'CertificationPathID':pathId,
+            'CertificationPath' : {
+                'CertificateID' : idList
+            }
+            }
+        return arg
+    
     def uploadTest(self):
         self.clean()
         print("loading path (size 2): ", end = '')
@@ -84,6 +93,29 @@ class PathTest:
         if path_id == INVALID_ID:
             raise ValueError("cant create valid path")
         print("OK")
+
+        print('setting new valid order: ', end = '')
+        oldObj = self.keystore.GetCertificationPath(path_id)
+        certIds = oldObj['CertificateID']
+        # print(certIds)
+        certIds = certIds[:-1]
+        # print(certIds)
+        args = PathTest.setCertPathArgs(path_id, certIds)
+        self.keystore.SetCertificationPath(**args)
+        newObj = self.keystore.GetCertificationPath(path_id)
+        if(newObj == oldObj):
+            raise ValueError('can`t change path')
+        self.clean()
+        print("OK")
+
+    # def setTest(self):
+    #     print("loading path (size 3): ", end = '')
+    #     path_id = self.createCertPath([CERT_3, CERT_2, CERT_1])
+    #     if path_id == INVALID_ID:
+    #         raise ValueError("cant create valid path")
+    #     self.keystore.GetCertificationPath(path_id)
+    #     self.clean()
+    #     print("OK")
 
     def multiLoadTest(self):
         self.clean()
