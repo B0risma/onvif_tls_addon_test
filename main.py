@@ -23,6 +23,9 @@ def test():
         PolicyTest(CAMERA_IP, USERNAME, PASSWORD).test()
         DotXTest(CAMERA_IP, USERNAME, PASSWORD).test()
     print("ALL OK!")
+
+
+
 # try:
 test()
 # except Exception as e:
