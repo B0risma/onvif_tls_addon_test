@@ -154,7 +154,7 @@ class PathTest:
         try:
             # overflow
             obj = self.createCertPath(VALID_ORDER)
-        except Fault as e:
+        except Fault:
             #normal
             pass
         # alternative handling

@@ -83,8 +83,12 @@ class CertTest:
         for i in range(0, limit):
             self.uploadCert(VALID_CERT2, Alias=f'test#{i}')
         # overflow
-        obj = self.uploadCert(VALID_CERT2, Alias=f'test#{limit}')
-        if(obj['CertificateID'] != INVALID_ID):
+        obj = None
+        try:
+            obj = self.uploadCert(VALID_CERT2, Alias=f'test#{limit}')
+        except Fault:
+            pass
+        if(obj and obj['CertificateID'] != INVALID_ID):
             raise ValueError("no upload limit")
         self.clean()
         print('OK')

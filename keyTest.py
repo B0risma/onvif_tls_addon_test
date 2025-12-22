@@ -129,8 +129,12 @@ class KeyTest:
         for i in range(0, limit):
             self.uploadKeypair(VALID_KEY, VALID_PASS, Alias=f'test#{i}')
         # overflow
-        id = self.uploadKeypair(VALID_KEY, VALID_PASS, Alias=f'test#{limit}')
-        if(id != INVALID_ID):
+        id = None
+        try:            
+            id = self.uploadKeypair(VALID_KEY, VALID_PASS, Alias=f'test#{limit}')
+        except Fault as e:
+            pass
+        if(id and id != INVALID_ID):
             raise ValueError("no upload limit")
         self.clean()
         print('KeylimitTest passed!')

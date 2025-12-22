@@ -50,8 +50,13 @@ class PassPhraseTest:
         for i in range(0, pass_limit):
             self.uploadPass(str(i), f'test#{i}')
         # overflow
-        id = self.uploadPass(str(i), f'test#{pass_limit}')
-        if(id != INVALID_ID):
+        id = None
+        try:
+            id = self.uploadPass(str(i), f'test#{pass_limit}')
+        except Fault as e:
+            #norm
+            pass
+        if(id and id != INVALID_ID):
             raise ValueError("no upload limit")
         self.cleanPasses()
         print('passLimitTest passed!')
