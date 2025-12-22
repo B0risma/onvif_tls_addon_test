@@ -4,15 +4,21 @@ from requests import Session
 from requests.auth import HTTPDigestAuth
 from zeep.exceptions import Fault, TransportError, XMLParseError
 
-from zeep.cache import SqliteCache
-cache = SqliteCache(path='./sqlite.db', timeout=60)
+# from zeep.cache import SqliteCache
+# cache = SqliteCache(path='./sqlite.db', timeout=60)
 
-SEC_WSDL = 'http://www.onvif.org/ver10/advancedsecurity/wsdl/advancedsecurity.wsdl'
+import os
+wsdl_dir = os.path.abspath("wsdl")
+
+SEC_PATH = f"file://{wsdl_dir}/advancedsecurity.wsdl"
+DEV_PATH = f"file://{wsdl_dir}/devicemgmt.wsdl"
+
+SEC_WSDL = SEC_PATH #'http://www.onvif.org/ver10/advancedsecurity/wsdl/advancedsecurity.wsdl'
 SEC_BINDING = '{http://www.onvif.org/ver10/advancedsecurity/wsdl}AdvancedSecurityServiceBinding'
 KEYSTORE_BINDING = '{http://www.onvif.org/ver10/advancedsecurity/wsdl}KeystoreBinding'
 DOTX_BINDING = '{http://www.onvif.org/ver10/advancedsecurity/wsdl}Dot1XBinding'
 
-DEV_WSDL = 'http://www.onvif.org/ver10/device/wsdl/devicemgmt.wsdl'
+DEV_WSDL = DEV_PATH #'http://www.onvif.org/ver10/device/wsdl/devicemgmt.wsdl'
 DEV_BINDING = '{http://www.onvif.org/ver10/device/wsdl}DeviceBinding'
 
 # older cert
@@ -38,7 +44,7 @@ class OnvifClient:
     def __init__(self, wsdl : str, user : str, pwd:str):
         self.session = Session()
         self.session.auth = HTTPDigestAuth(user, pwd)
-        self.transport = Transport(session=self.session, cache=cache)
+        self.transport = Transport(session=self.session)#, cache=cache)
         self.client = Client(wsdl=wsdl, transport=self.transport)
 
     def createService(self, binding, endpoint):

@@ -1,6 +1,7 @@
 from zeep.exceptions import Fault, TransportError, XMLParseError
 
 from onvifClient import *
+from keyTest import *
 import base64
 
 class CertTest:
@@ -9,6 +10,7 @@ class CertTest:
         self.client = OnvifClient(SEC_WSDL, user, pwd)
         self.endp =  f'http://{ip}/onvif/security_service'
         self.keystore = self.client.createService(KEYSTORE_BINDING, self.endp)
+        self.keyLoader = KeyTest(ip, user, pwd)
 
     def find(id : str, certs : list, Alias:str = None):
         Certificate = None
@@ -21,6 +23,7 @@ class CertTest:
         return Certificate
     
     def clean(self):
+        self.keyLoader.clean()
         objs = self.keystore.GetAllCertificates()
         # print(f'current passes: {pwds}')
         for p in objs:

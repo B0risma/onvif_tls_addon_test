@@ -8,6 +8,31 @@ from pathTest import *
 from policyTest import *
 from dotXTest import *
 
+# import logging.config
+# # request data logging
+# logging.config.dictConfig({
+#     'version': 1,
+#     'formatters': {
+#         'verbose': {
+#             'format': '%(name)s: %(message)s'
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'verbose',
+#         },
+#     },
+#     'loggers': {
+#         'zeep.transports': {
+#             'level': 'DEBUG',
+#             'propagate': True,
+#             'handlers': ['console'],
+#         },
+#     }
+# })
+
 # Camera credentials
 CAMERA_IP = "192.168.7.155"
 USERNAME = "admin"
