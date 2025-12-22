@@ -67,31 +67,31 @@ dotxSender = DotXTest(CAMERA_IP, USERNAME, PASSWORD)
 # clean old related data
 dotxSender.clean()
 # add MD5 config
-# id = dotxSender.addMD5(USER, PWD)
-# print(f'MD5 cfg OK')
-# # clean if needed
-# dotxSender.clean()
+id = dotxSender.addMD5(USER, PWD)
+print(f'MD5 cfg OK')
+# clean if needed
+dotxSender.clean()
 
-# # add MSCHAP config
-# id = dotxSender.addMSCHAP(USER, PWD)
-# print(f'MSCHAP cfg OK')
-# # clean if needed
-# dotxSender.clean()
+# add MSCHAP config
+id = dotxSender.addMSCHAP(USER, PWD)
+print(f'MSCHAP cfg OK')
+# clean if needed
+dotxSender.clean()
 
-# # add PEAP-MSCHAP config
-# id = dotxSender.addPEAP(USER, PWD)
-# print(f'PEAP cfg OK')
-# # clean if needed
-# dotxSender.clean()
+# add PEAP-MSCHAP config
+id = dotxSender.addPEAP(USER, PWD)
+print(f'PEAP cfg OK')
+# clean if needed
+dotxSender.clean()
 
-# # add TTLS/MD5 config
-# id = dotxSender.addTTLS(USER, PWD, ca_crt_b64DER)
-# print(f'TTLS cfg OK')
-# # clean if needed
-# dotxSender.clean()
+# add TTLS/MD5 config
+id = dotxSender.addTTLS(USER, PWD, ca_crt_b64DER)
+print(f'TTLS cfg OK')
+# clean if needed
+dotxSender.clean()
 
 # add TTLS/MD5 config
 id = dotxSender.addTLS(ca_crt_b64DER, user_crt_b64DER, user_key_b64DER, keyPass=KEY_PASSWORD)
 print(f'TLS cfg OK')
 # clean if needed
-# dotxSender.clean()
+dotxSender.clean()
