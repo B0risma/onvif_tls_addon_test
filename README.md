@@ -11,3 +11,8 @@ Tests:
 ## samples.py 
 - samples of dotx configurations 
 - just run
+
+## requirements
+```pip3 install requirements.txt```  
+or  
+``` apt install python3-requests python3-zeep ```
