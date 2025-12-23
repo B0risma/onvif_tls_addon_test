@@ -24,8 +24,9 @@ class KeyTest:
         for p in objs:
             self.keystore.DeleteKey(p['KeyID'])
 
-    def uploadKeypair(self, key_b64_der : str, pwd : str = None, pw_id:str = None, Alias:str = None):
-        arg = {"KeyPair" : key_b64_der}
+    def uploadKeypair(self, key_b64_der: str, pwd: str = None, pw_id: str = None, Alias: str = None):
+        import base64
+        arg = {"KeyPair": base64.b64decode(key_b64_der)}
         if pwd:
             arg["EncryptionPassphrase"] = pwd
         elif pw_id:
@@ -33,7 +34,7 @@ class KeyTest:
         if Alias:
             arg['Alias'] = Alias
         return self.keystore.UploadKeyPairInPKCS8(**arg)
-    
+
     def uploadTest(self):
         print("loading key: ", end = '')
         id = self.uploadKeypair(VALID_KEY,pwd=VALID_PASS, Alias="private") # uploading private key 

@@ -29,12 +29,12 @@ class CertTest:
         for p in objs:
             self.keystore.DeleteCertificate(p['CertificateID'])
 
-    def uploadCert(self, cert_b64_der : str, Alias:str = None):
-        arg = {"Certificate" : cert_b64_der}
+    def uploadCert(self, cert_b64_der: str, Alias: str = None):
+        arg = {"Certificate": base64.b64decode(cert_b64_der)}
         if Alias:
             arg['Alias'] = Alias
         return self.keystore.UploadCertificate(**arg)
-    
+
     def uploadTest(self):
         print("loading Certificate: ", end = '')
         resp = self.uploadCert(VALID_CERT2, Alias=self.TEST_ALIAS)
@@ -130,7 +130,7 @@ class CertTest:
         self.cleanKeys()
 
         print("cert + key: ", end='')
-        keyArg = {"KeyPair" : VALID_KEY2}
+        keyArg = {"KeyPair": base64.b64decode(VALID_KEY2)}
         kId = self.keystore.UploadKeyPairInPKCS8(**keyArg)
         kId_2 = self.uploadCert(VALID_CERT2)['KeyID']
         if(kId != kId_2):
